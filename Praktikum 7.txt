@@ -1,0 +1,217 @@
+mysql> prompt tata>
+PROMPT set to 'tata>'
+tata> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| inventory          |
+| mysql              |
+| performance_schema |
+| praktikum_5        |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.01 sec)
+
+tata> use inventory;
+Database changed
+tata> show tables;
++---------------------+
+| Tables_in_inventory |
++---------------------+
+| barang              |
+| ruang               |
++---------------------+
+2 rows in set (0.01 sec)
+
+tata> select * from ruang;
++---------+------------+--------+---------------+------+-----------+
+| noruang | blokgedung | lantai | fungsi        | luas | kapasitas |
++---------+------------+--------+---------------+------+-----------+
+| A101    | A          |      1 | Ruang Seminar |   60 |        40 |
+| A102    | A          |      1 | Ruang Tamu    |   18 |         6 |
+| A201    | A          |      2 | Lab Komputer  |   72 |        50 |
+| B101    | B          |      1 | Ruang Kuliah  |   60 |        40 |
+| B102    | B          |      1 | Ruang Kuliah  |   60 |        45 |
+| B201    | B          |      2 | Ruang Kuliah  |   70 |        50 |
+| B202    | B          |      2 | Ruang Kuliah  |   75 |        60 |
+| B203    | B          |      2 | Lab Komputer  |   50 |        40 |
+| B303    | B          |      3 | Ruang Kuliah  |   72 |        50 |
++---------+------------+--------+---------------+------+-----------+
+9 rows in set (0.00 sec)
+
+tata> select * from ruang
+    -> where (fungsi <> "Ruang Seminar" and fungsi <> "Ruang Tamu")
+    -> and luas >= 50;
++---------+------------+--------+--------------+------+-----------+
+| noruang | blokgedung | lantai | fungsi       | luas | kapasitas |
++---------+------------+--------+--------------+------+-----------+
+| A201    | A          |      2 | Lab Komputer |   72 |        50 |
+| B101    | B          |      1 | Ruang Kuliah |   60 |        40 |
+| B102    | B          |      1 | Ruang Kuliah |   60 |        45 |
+| B201    | B          |      2 | Ruang Kuliah |   70 |        50 |
+| B202    | B          |      2 | Ruang Kuliah |   75 |        60 |
+| B203    | B          |      2 | Lab Komputer |   50 |        40 |
+| B303    | B          |      3 | Ruang Kuliah |   72 |        50 |
++---------+------------+--------+--------------+------+-----------+
+7 rows in set (0.00 sec)
+
+tata> select noruang, fungsi, luas, kapasitas from ruang
+    -> where (fungsi = "Ruang Kuliah" && luas >= 1.5*kapasitas);
++---------+--------------+------+-----------+
+| noruang | fungsi       | luas | kapasitas |
++---------+--------------+------+-----------+
+| B101    | Ruang Kuliah |   60 |        40 |
++---------+--------------+------+-----------+
+1 row in set, 1 warning (0.04 sec)
+
+tata> select * from barang;
++----------+------------------+------------+-------------+--------+
+| nobarang | namabarang       | sumberdana | thnproduksi | satuan |
++----------+------------------+------------+-------------+--------+
+|   108001 | Meja Kuliah      | PNBP       |        2008 | Unit   |
+|   109001 | Meja Komputer    | PNBP       |        2009 | Unit   |
+|   110001 | Meja Sidang      | PNBP       |        2010 | Unit   |
+|   111001 | Meja Tamu        | BMOM       |        2011 | Unit   |
+|   208001 | Kursi Kuliah     | PNBP       |        2008 | Unit   |
+|   208002 | Kursi Kuliah     | BMOM       |        2008 | Unit   |
+|   209001 | Kursi Lipat      | PNBP       |        2009 | Unit   |
+|   210001 | Kursi Sidang     | PNBP       |        2010 | Unit   |
+|   210002 | Kursi Kuliah     | Hibah      |        2010 | Unit   |
+|   211001 | Kursi Tamu       | BMOM       |        2011 | Unit   |
+|   211002 | Kursi Kuliah     | PNBP       |        2011 | Unit   |
+|   308001 | LCD              | PNBP       |        2008 | Unit   |
+|   309001 | LCD              | Hibah      |        2009 | Unit   |
+|   409001 | Layar Peraga     | BMOM       |        2009 | Unit   |
+|   409002 | Layar Peraga     | Hibah      |        2009 | Unit   |
+|   409003 | Whiteboard       | PNBP       |        2009 | Unit   |
+|   509001 | Komputer Desktop | PNBP       |        2009 | Unit   |
+|   509002 | Printer Laser    | PNBP       |        2009 | Unit   |
++----------+------------------+------------+-------------+--------+
+18 rows in set (0.02 sec)
+
+tata> select * from barang
+    -> where (sumberdana = "Hibah" || sumberdana = "BMOM") and
+    -> namabarang <> "Kursi Kuliah";
++----------+--------------+------------+-------------+--------+
+| nobarang | namabarang   | sumberdana | thnproduksi | satuan |
++----------+--------------+------------+-------------+--------+
+|   111001 | Meja Tamu    | BMOM       |        2011 | Unit   |
+|   211001 | Kursi Tamu   | BMOM       |        2011 | Unit   |
+|   309001 | LCD          | Hibah      |        2009 | Unit   |
+|   409001 | Layar Peraga | BMOM       |        2009 | Unit   |
+|   409002 | Layar Peraga | Hibah      |        2009 | Unit   |
++----------+--------------+------------+-------------+--------+
+5 rows in set, 1 warning (0.00 sec)
+
+tata> select nobarang, namabarang, sumberdana, thnproduksi from barang
+    -> where (sumberdana = "PNBP" and thnproduksi <> 2009);
++----------+--------------+------------+-------------+
+| nobarang | namabarang   | sumberdana | thnproduksi |
++----------+--------------+------------+-------------+
+|   108001 | Meja Kuliah  | PNBP       |        2008 |
+|   110001 | Meja Sidang  | PNBP       |        2010 |
+|   208001 | Kursi Kuliah | PNBP       |        2008 |
+|   210001 | Kursi Sidang | PNBP       |        2010 |
+|   211002 | Kursi Kuliah | PNBP       |        2011 |
+|   308001 | LCD          | PNBP       |        2008 |
++----------+--------------+------------+-------------+
+6 rows in set (0.00 sec)
+
+tata> select * from barang
+    -> where thnproduksi = 2008 &&
+    -> namabarang <> "Kursi Kuliah" &&
+    -> sumberdana = "PNBP";
++----------+-------------+------------+-------------+--------+
+| nobarang | namabarang  | sumberdana | thnproduksi | satuan |
++----------+-------------+------------+-------------+--------+
+|   108001 | Meja Kuliah | PNBP       |        2008 | Unit   |
+|   308001 | LCD         | PNBP       |        2008 | Unit   |
++----------+-------------+------------+-------------+--------+
+2 rows in set, 2 warnings (0.01 sec)
+
+tata> select * from ruang;
++---------+------------+--------+---------------+------+-----------+
+| noruang | blokgedung | lantai | fungsi        | luas | kapasitas |
++---------+------------+--------+---------------+------+-----------+
+| A101    | A          |      1 | Ruang Seminar |   60 |        40 |
+| A102    | A          |      1 | Ruang Tamu    |   18 |         6 |
+| A201    | A          |      2 | Lab Komputer  |   72 |        50 |
+| B101    | B          |      1 | Ruang Kuliah  |   60 |        40 |
+| B102    | B          |      1 | Ruang Kuliah  |   60 |        45 |
+| B201    | B          |      2 | Ruang Kuliah  |   70 |        50 |
+| B202    | B          |      2 | Ruang Kuliah  |   75 |        60 |
+| B203    | B          |      2 | Lab Komputer  |   50 |        40 |
+| B303    | B          |      3 | Ruang Kuliah  |   72 |        50 |
++---------+------------+--------+---------------+------+-----------+
+9 rows in set (0.00 sec)
+
+tata> select * from ruang
+    -> order by luas DESC, kapasitas DESC;
++---------+------------+--------+---------------+------+-----------+
+| noruang | blokgedung | lantai | fungsi        | luas | kapasitas |
++---------+------------+--------+---------------+------+-----------+
+| B202    | B          |      2 | Ruang Kuliah  |   75 |        60 |
+| A201    | A          |      2 | Lab Komputer  |   72 |        50 |
+| B303    | B          |      3 | Ruang Kuliah  |   72 |        50 |
+| B201    | B          |      2 | Ruang Kuliah  |   70 |        50 |
+| B102    | B          |      1 | Ruang Kuliah  |   60 |        45 |
+| A101    | A          |      1 | Ruang Seminar |   60 |        40 |
+| B101    | B          |      1 | Ruang Kuliah  |   60 |        40 |
+| B203    | B          |      2 | Lab Komputer  |   50 |        40 |
+| A102    | A          |      1 | Ruang Tamu    |   18 |         6 |
++---------+------------+--------+---------------+------+-----------+
+9 rows in set (0.00 sec)
+
+tata> select * from barang;
++----------+------------------+------------+-------------+--------+
+| nobarang | namabarang       | sumberdana | thnproduksi | satuan |
++----------+------------------+------------+-------------+--------+
+|   108001 | Meja Kuliah      | PNBP       |        2008 | Unit   |
+|   109001 | Meja Komputer    | PNBP       |        2009 | Unit   |
+|   110001 | Meja Sidang      | PNBP       |        2010 | Unit   |
+|   111001 | Meja Tamu        | BMOM       |        2011 | Unit   |
+|   208001 | Kursi Kuliah     | PNBP       |        2008 | Unit   |
+|   208002 | Kursi Kuliah     | BMOM       |        2008 | Unit   |
+|   209001 | Kursi Lipat      | PNBP       |        2009 | Unit   |
+|   210001 | Kursi Sidang     | PNBP       |        2010 | Unit   |
+|   210002 | Kursi Kuliah     | Hibah      |        2010 | Unit   |
+|   211001 | Kursi Tamu       | BMOM       |        2011 | Unit   |
+|   211002 | Kursi Kuliah     | PNBP       |        2011 | Unit   |
+|   308001 | LCD              | PNBP       |        2008 | Unit   |
+|   309001 | LCD              | Hibah      |        2009 | Unit   |
+|   409001 | Layar Peraga     | BMOM       |        2009 | Unit   |
+|   409002 | Layar Peraga     | Hibah      |        2009 | Unit   |
+|   409003 | Whiteboard       | PNBP       |        2009 | Unit   |
+|   509001 | Komputer Desktop | PNBP       |        2009 | Unit   |
+|   509002 | Printer Laser    | PNBP       |        2009 | Unit   |
++----------+------------------+------------+-------------+--------+
+18 rows in set (0.00 sec)
+
+tata> select * from barang
+    -> order by thnproduksi DESC, sumberdana ASC;
++----------+------------------+------------+-------------+--------+
+| nobarang | namabarang       | sumberdana | thnproduksi | satuan |
++----------+------------------+------------+-------------+--------+
+|   111001 | Meja Tamu        | BMOM       |        2011 | Unit   |
+|   211001 | Kursi Tamu       | BMOM       |        2011 | Unit   |
+|   211002 | Kursi Kuliah     | PNBP       |        2011 | Unit   |
+|   210002 | Kursi Kuliah     | Hibah      |        2010 | Unit   |
+|   110001 | Meja Sidang      | PNBP       |        2010 | Unit   |
+|   210001 | Kursi Sidang     | PNBP       |        2010 | Unit   |
+|   409001 | Layar Peraga     | BMOM       |        2009 | Unit   |
+|   309001 | LCD              | Hibah      |        2009 | Unit   |
+|   409002 | Layar Peraga     | Hibah      |        2009 | Unit   |
+|   109001 | Meja Komputer    | PNBP       |        2009 | Unit   |
+|   209001 | Kursi Lipat      | PNBP       |        2009 | Unit   |
+|   409003 | Whiteboard       | PNBP       |        2009 | Unit   |
+|   509001 | Komputer Desktop | PNBP       |        2009 | Unit   |
+|   509002 | Printer Laser    | PNBP       |        2009 | Unit   |
+|   208002 | Kursi Kuliah     | BMOM       |        2008 | Unit   |
+|   108001 | Meja Kuliah      | PNBP       |        2008 | Unit   |
+|   208001 | Kursi Kuliah     | PNBP       |        2008 | Unit   |
+|   308001 | LCD              | PNBP       |        2008 | Unit   |
++----------+------------------+------------+-------------+--------+
+18 rows in set (0.01 sec)

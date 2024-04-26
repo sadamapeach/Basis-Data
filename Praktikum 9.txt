@@ -1,0 +1,352 @@
+tata> select * from ruang;
++---------+------------+--------+---------------+------+-----------+
+| noruang | blokgedung | lantai | fungsi        | luas | kapasitas |
++---------+------------+--------+---------------+------+-----------+
+| A101    | A          |      1 | Ruang Seminar |   60 |        40 |
+| A102    | A          |      1 | Ruang Tamu    |   18 |         6 |
+| A201    | A          |      2 | Lab Komputer  |   72 |        50 |
+| B101    | B          |      1 | Ruang Kuliah  |   60 |        40 |
+| B102    | B          |      1 | Ruang Kuliah  |   60 |        45 |
+| B201    | B          |      2 | Ruang Kuliah  |   70 |        50 |
+| B202    | B          |      2 | Ruang Kuliah  |   75 |        60 |
+| B203    | B          |      2 | Lab Komputer  |   50 |        40 |
+| B303    | B          |      3 | Ruang Kuliah  |   72 |        50 |
++---------+------------+--------+---------------+------+-----------+
+9 rows in set (0.00 sec)
+
+tata> select * from barang;
++----------+------------------+------------+-------------+--------+
+| nobarang | namabarang       | sumberdana | thnproduksi | satuan |
++----------+------------------+------------+-------------+--------+
+|   108001 | Meja Kuliah      | PNBP       |        2008 | Unit   |
+|   109001 | Meja Komputer    | PNBP       |        2009 | Unit   |
+|   110001 | Meja Sidang      | PNBP       |        2010 | Unit   |
+|   111001 | Meja Tamu        | BMOM       |        2011 | Unit   |
+|   208001 | Kursi Kuliah     | PNBP       |        2008 | Unit   |
+|   208002 | Kursi Kuliah     | BMOM       |        2008 | Unit   |
+|   209001 | Kursi Lipat      | PNBP       |        2009 | Unit   |
+|   210001 | Kursi Sidang     | PNBP       |        2010 | Unit   |
+|   210002 | Kursi Kuliah     | Hibah      |        2010 | Unit   |
+|   211001 | Kursi Tamu       | BMOM       |        2011 | Unit   |
+|   211002 | Kursi Kuliah     | PNBP       |        2011 | Unit   |
+|   308001 | LCD              | PNBP       |        2008 | Unit   |
+|   309001 | LCD              | Hibah      |        2009 | Unit   |
+|   409001 | Layar Peraga     | BMOM       |        2009 | Unit   |
+|   409002 | Layar Peraga     | Hibah      |        2009 | Unit   |
+|   409003 | Whiteboard       | PNBP       |        2009 | Unit   |
+|   509001 | Komputer Desktop | PNBP       |        2009 | Unit   |
+|   509002 | Printer Laser    | PNBP       |        2009 | Unit   |
++----------+------------------+------------+-------------+--------+
+18 rows in set (0.00 sec)
+
+tata> select * from isiruang;
++---------+----------+--------+
+| noruang | nobarang | jumlah |
++---------+----------+--------+
+| A101    |   110001 |      6 |
+| A101    |   210001 |     12 |
+| A101    |   409001 |      1 |
+| A101    |   309001 |      1 |
+| A102    |   111001 |      1 |
+| A102    |   211001 |      4 |
+| A201    |   109001 |     40 |
+| A201    |   209001 |     42 |
+| A201    |   409002 |      1 |
+| A201    |   108001 |      2 |
+| A201    |   308001 |      1 |
+| B101    |   409001 |      1 |
+| B101    |   308001 |      1 |
+| B101    |   409003 |      2 |
+| B101    |   108001 |      1 |
+| B101    |   208001 |     50 |
+| B303    |   409001 |      1 |
+| B303    |   308001 |      1 |
+| B303    |   409003 |      1 |
+| B303    |   108001 |      1 |
+| B303    |   208001 |     50 |
++---------+----------+--------+
+21 rows in set (0.00 sec)
+
+tata> select isiruang.noruang, ruang.fungsi, isiruang.jumlah
+    -> from isiruang, ruang
+    -> where isiruang.nobarang like "3%"
+    -> and isiruang.noruang = ruang.noruang;
++---------+---------------+--------+
+| noruang | fungsi        | jumlah |
++---------+---------------+--------+
+| A101    | Ruang Seminar |      1 |
+| A201    | Lab Komputer  |      1 |
+| B101    | Ruang Kuliah  |      1 |
+| B303    | Ruang Kuliah  |      1 |
++---------+---------------+--------+
+4 rows in set (0.00 sec)
+
+tata> select isiruang.noruang, ruang.fungsi, isiruang.jumlah
+    -> from isiruang, ruang
+    -> where ruang.fungsi = "Ruang Kuliah"
+    -> and isiruang.nobarang like "2%"
+    -> and isiruang.jumlah >= 50
+    -> and isiruang.noruang = ruang.noruang;
++---------+--------------+--------+
+| noruang | fungsi       | jumlah |
++---------+--------------+--------+
+| B101    | Ruang Kuliah |     50 |
+| B303    | Ruang Kuliah |     50 |
++---------+--------------+--------+
+2 rows in set (0.00 sec)
+
+tata> select isiruang.nobarang, barang.namabarang, isiruang.noruang,
+ruang.fungsi
+    -> from isiruang, barang, ruang
+    -> where ruang.fungsi = "Ruang Kuliah"
+    -> and ruang.lantai = 2
+    -> and isiruang.nobarang = barang.nobarang
+    -> and isiruang.noruang = ruang.noruang;
+Empty set (0.00 sec)
+
+tata> select isiruang.nobarang, barang.namabarang, isiruang.jumlah, isiruang.noruang, ruang.fungsi
+    -> from isiruang, barang, ruang
+    -> where ruang.fungsi = "Lab Komputer"
+    -> and isiruang.nobarang = barang.nobarang
+    -> and isiruang.noruang = ruang.noruang;
++----------+---------------+--------+---------+--------------+
+| nobarang | namabarang    | jumlah | noruang | fungsi       |
++----------+---------------+--------+---------+--------------+
+|   109001 | Meja Komputer |     40 | A201    | Lab Komputer |
+|   209001 | Kursi Lipat   |     42 | A201    | Lab Komputer |
+|   409002 | Layar Peraga  |      1 | A201    | Lab Komputer |
+|   108001 | Meja Kuliah   |      2 | A201    | Lab Komputer |
+|   308001 | LCD           |      1 | A201    | Lab Komputer |
++----------+---------------+--------+---------+--------------+
+5 rows in set (0.00 sec)
+
+tata> select isiruang.nobarang, barang.namabarang, isiruang.jumlah, i
+siruang.noruang, ruang.fungsi
+    -> from isiruang, barang, ruang
+    -> where (barang.namabarang = "Layar Peraga"
+    -> or barang.namabarang = "Whiteboard")
+    -> and (isiruang.nobarang = barang.nobarang
+    -> and isiruang.noruang = ruang.noruang);
++----------+--------------+--------+---------+---------------+
+| nobarang | namabarang   | jumlah | noruang | fungsi        |
++----------+--------------+--------+---------+---------------+
+|   409001 | Layar Peraga |      1 | A101    | Ruang Seminar |
+|   409002 | Layar Peraga |      1 | A201    | Lab Komputer  |
+|   409001 | Layar Peraga |      1 | B101    | Ruang Kuliah  |
+|   409003 | Whiteboard   |      2 | B101    | Ruang Kuliah  |
+|   409001 | Layar Peraga |      1 | B303    | Ruang Kuliah  |
+|   409003 | Whiteboard   |      1 | B303    | Ruang Kuliah  |
++----------+--------------+--------+---------+---------------+
+6 rows in set (0.04 sec)
+
+=========================== TUGAS B ===========================
+
+tata> select * from countries;
++------------+--------------------------+-----------+
+| country_id | country_name             | region_id |
++------------+--------------------------+-----------+
+| CA         | Canada                   |         2 |
+| DE         | Germany                  |         1 |
+| UK         | United Kigdom            |         1 |
+| US         | United States of America |         2 |
++------------+--------------------------+-----------+
+4 rows in set (0.00 sec)
+
+tata> select * from departments;
++---------------+-----------------+------------+-------------+
+| department_id | department_name | manager_id | location_id |
++---------------+-----------------+------------+-------------+
+|            10 | Administration  |        200 |        1700 |
+|            20 | Marketing       |        201 |        1800 |
+|            50 | Shipping        |        124 |        1500 |
+|            60 | IT              |        103 |        1400 |
+|            80 | Sales           |        149 |        2500 |
+|            90 | Executive       |        100 |        1700 |
+|           110 | Accounting      |        205 |        1700 |
+|           190 | Contracting     |       NULL |        1700 |
++---------------+-----------------+------------+-------------+
+8 rows in set (0.00 sec)
+
+tata> select * from employees;
++-------------+------------+-----------+----------+--------------------+------------+------------+--------+----------------+------------+---------------+-------+
+| employee_id | first_name | last_name | email    | phone_number       | hire_date  | job_id     | salary | commission_pct | manager_id | department_id | bonus |
++-------------+------------+-----------+----------+--------------------+------------+------------+--------+----------------+------------+---------------+-------+
+|         100 | Steven     | King      | SKING    | 515.123.4567       | 1987-06-17 | AD_PRES    |  24000 |           NULL |       NULL |            90 | NULL  |
+|         101 | Neena      | Kochhar   | NKOCHHAR | 515.123.4568       | 1989-09-21 | AD_VP      |  17000 |           NULL |        100 |            90 | NULL  |
+|         102 | Lex        | De Haan   | LDEHAAN  | 515.123.4569       | 1993-01-13 | AD_VP      |  17000 |           NULL |        100 |            90 | NULL  |
+|         103 | Alexander  | Hunold    | AHUNOLD  | 590.423.4567       | 1990-01-03 | IT_PROG    |   9000 |           NULL |        102 |            60 | NULL  |
+|         104 | Bruce      | Ernst     | BERNST   | 590.423.4568       | 1991-05-21 | IT_PROG    |   6000 |           NULL |        103 |            60 | NULL  |
+|         107 | Diana      | Lorentz   | DLORENTZ | 590.423.5567       | 1999-02-07 | IT_PROG    |   4200 |           NULL |        103 |            60 | NULL  |
+|         124 | Kevin      | Mourgos   | KMOURGOS | 650.123.5234       | 1999-11-16 | ST_MAN     |   5800 |           NULL |        100 |            50 | NULL  |
+|         141 | Trenna     | Rajs      | TRAJS    | 650.121.8009       | 1995-10-17 | ST_CLERK   |   3500 |           NULL |        124 |            50 | NULL  |
+|         142 | Curtis     | Davies    | CDAVIES  | 650.121.2994       | 1997-01-29 | ST_CLERK   |   3100 |           NULL |        124 |            50 | NULL  |
+|         143 | Randall    | Matos     | RMATOS   | 650.121.2874       | 1998-03-15 | ST_CLERK   |   2600 |           NULL |        124 |            50 | NULL  |
+|         144 | Peter      | Vargas    | PVARGAS  | 650.121.2004       | 1998-06-09 | ST_CLERK   |   2500 |           NULL |        124 |            50 | NULL  |
+|         149 | Eleni      | Zlotkey   | EZLOTKEY | 011.44.1344.429018 | 2000-01-29 | SA_MAN     |  10500 |              0 |        100 |            80 | 1500  |
+|         174 | Ellen      | Abel      | EABEL    | 011.44.1644.429267 | 1996-05-11 | SA_REP     |  11000 |              0 |        149 |            80 | 1700  |
+|         176 | Jonathon   | Taylor    | JTAYLOR  | 011.44.1644.429265 | 1998-03-24 | SA_REP     |   8600 |              0 |        149 |            80 | 1250  |
+|         178 | Kimberely  | Grant     | KGRANT   | 011.44.1644.429263 | 1999-05-24 | SA_REP     |   7000 |              0 |        149 |          NULL | NULL  |
+|         200 | Jennifer   | Whalen    | JWHALEN  | 515.123.4444       | 1987-09-17 | AD_ASST    |   4400 |           NULL |        101 |            10 | NULL  |
+|         201 | Michael    | Hartstein | MHARTSTE | 515.123.5555       | 1999-02-17 | MK_MAN     |  13000 |           NULL |        100 |            20 | NULL  |
+|         202 | Pat        | Fay       | PFAY     | 603.123.6666       | 1997-08-17 | MK_REP     |   6000 |           NULL |        201 |
+           20 | NULL  |
+|         205 | Shelley    | Higgins   | SHIGGINS | 515.123.8080       | 1994-01-07 | AC_MGR     |  12000 |           NULL |        101 |           110 | NULL  |
+|         206 | William    | Gietz     | WGIETZ   | 515.123.8181       | 1994-06-07 | AC_ACCOUNT |   8300 |           NULL |        205 |           110 | NULL  |
++-------------+------------+-----------+----------+--------------------+------------+------------+--------+----------------+------------+---------------+-------+
+20 rows in set (0.00 sec)
+
+tata> select * from job_history
+    -> ;
++-------------+------------+------------+------------+---------------+
+| employee_id | start_date | end_date   | job_id     | department_id |
++-------------+------------+------------+------------+---------------+
+|         200 | 1987-09-17 | 1993-06-17 | AD_ASST    |            90 |
+|         101 | 1993-10-28 | 1997-03-15 | AC_MGR     |           110 |
+|         200 | 1994-07-01 | 1998-12-31 | AC_ACCOUNT |            90 |
+|         101 | 1989-09-21 | 1993-10-27 | AC_ACCOUNT |           110 |
+|         176 | 1999-01-01 | 0199-12-31 | SA_MAN     |            80 |
+|         176 | 1998-03-24 | 1999-12-31 | SA_REP     |            80 |
+|         122 | 1999-01-01 | 0199-12-31 | ST_CLERK   |            50 |
+|         114 | 1998-03-24 | 0199-12-31 | ST_CLERK   |            50 |
+|         102 | 1993-01-13 | 1998-07-24 | IT_PROG    |            60 |
+|         201 | 1996-02-17 | 1999-12-19 | MK_REP     |            20 |
++-------------+------------+------------+------------+---------------+
+10 rows in set (0.00 sec)
+
+tata> select * from jobs;
++------------+-------------------------------+------------+------------+
+| job_id     | job_title                     | min_salary | max_salary |
++------------+-------------------------------+------------+------------+
+| AD_PRES    | President                     |      20000 |      40000 |
+| AD_VP      | Administration Vice President |      15000 |      30000 |
+| AD_ASST    | Administration Assistant      |       3000 |       6000 |
+| AC_MGR     | Accounting Manager            |       8200 |      16000 |
+| AC_ACCOUNT | Public Accountant             |       4200 |       9000 |
+| SA_MAN     | Sales Manager                 |      10000 |      20000 |
+| SA_REP     | Sales Representative          |       6000 |      12000 |
+| ST_MAN     | Stock Manager                 |       5500 |       8500 |
+| ST_CLERK   | Stock Clerk                   |       2000 |       5000 |
+| IT_PROG    | Programmer                    |       4000 |      10000 |
+| MK_MAN     | Marketing Manager             |       9000 |      15000 |
+| MK_REP     | Marketing Representative      |       4000 |       9000 |
++------------+-------------------------------+------------+------------+
+12 rows in set (0.00 sec)
+
+tata> select * from locations;
++-------------+------------------------------------------+-------------+---------------------+----------------+------------+
+| location_id | street_address                           | postal_code | city                | state_province | country_id |
++-------------+------------------------------------------+-------------+---------------------+----------------+------------+
+|        1800 | 460 Bloor St. W.                         | ON M5S 1X8  | Toronto             | Ontario        | CA         |
+|        2500 | Magdalen Centre, The Oxford Science Park | OX9 9ZB     | Oxford              | Oxford         | UK         |
+|        1400 | 2014 Jabberwocky Rd                      | 26192       | Southlake           | Texas          | US         |
+|        1500 | 2011 Interiors Blvd                      | 99236       | South San Francisco | California     | US         |
+|        1700 | 2004 Charade Rd                          | 98199       | Seattle             | Washington     | US         |
++-------------+------------------------------------------+-------------+---------------------+----------------+------------+
+5 rows in set (0.00 sec)
+
+tata> select * from regions;
++-----------+------------------------+
+| region_id | region_name            |
++-----------+------------------------+
+|         1 | Europe                 |
+|         2 | Americans              |
+|         3 | Asia                   |
+|         4 | Middle East And Africa |
+|         5 | Mediterranean          |
++-----------+------------------------+
+5 rows in set (0.00 sec)
+
+INNER JOIN
+tata> select employees.employee_id, employees.first_name, departments.department_name
+    -> from employees INNER JOIN departments
+    -> on employees.department_id = departments.department_id;
++-------------+------------+-----------------+
+| employee_id | first_name | department_name |
++-------------+------------+-----------------+
+|         100 | Steven     | Executive       |
+|         101 | Neena      | Executive       |
+|         102 | Lex        | Executive       |
+|         103 | Alexander  | IT              |
+|         104 | Bruce      | IT              |
+|         107 | Diana      | IT              |
+|         124 | Kevin      | Shipping        |
+|         141 | Trenna     | Shipping        |
+|         142 | Curtis     | Shipping        |
+|         143 | Randall    | Shipping        |
+|         144 | Peter      | Shipping        |
+|         149 | Eleni      | Sales           |
+|         174 | Ellen      | Sales           |
+|         176 | Jonathon   | Sales           |
+|         200 | Jennifer   | Administration  |
+|         201 | Michael    | Marketing       |
+|         202 | Pat        | Marketing       |
+|         205 | Shelley    | Accounting      |
+|         206 | William    | Accounting      |
++-------------+------------+-----------------+
+19 rows in set (0.00 sec)
+
+STRAIGHT JOIN
+tata> select * from countries STRAIGHT JOIN regions;
++------------+--------------------------+-----------+-----------+------------------------+
+| country_id | country_name             | region_id | region_id | region_name            |
++------------+--------------------------+-----------+-----------+------------------------+
+| US         | United States of America |         2 |         1 | Europe                 |
+| UK         | United Kigdom            |         1 |         1 | Europe                 |
+| DE         | Germany                  |         1 |         1 | Europe                 |
+| CA         | Canada                   |         2 |         1 | Europe                 |
+| US         | United States of America |         2 |         2 | Americans              |
+| UK         | United Kigdom            |         1 |         2 | Americans              |
+| DE         | Germany                  |         1 |         2 | Americans              |
+| CA         | Canada                   |         2 |         2 | Americans              |
+| US         | United States of America |         2 |         3 | Asia                   |
+| UK         | United Kigdom            |         1 |         3 | Asia                   |
+| DE         | Germany                  |         1 |         3 | Asia                   |
+| CA         | Canada                   |         2 |         3 | Asia                   |
+| US         | United States of America |         2 |         4 | Middle East And Africa |
+| UK         | United Kigdom            |         1 |         4 | Middle East And Africa |
+| DE         | Germany                  |         1 |         4 | Middle East And Africa |
+| CA         | Canada                   |         2 |         4 | Middle East And Africa |
+| US         | United States of America |         2 |         5 | Mediterranean          |
+| UK         | United Kigdom            |         1 |         5 | Mediterranean          |
+| DE         | Germany                  |         1 |         5 | Mediterranean          |
+| CA         | Canada                   |         2 |         5 | Mediterranean          |
++------------+--------------------------+-----------+-----------+------------------------+
+20 rows in set (0.00 sec)
+
+RIGHT JOIN
+tata> select departments.department_id, locations.city, locations.state_province
+    -> from locations RIGHT JOIN departments
+    -> on locations.location_id = departments.location_id;
++---------------+---------------------+----------------+
+| department_id | city                | state_province |
++---------------+---------------------+----------------+
+|            10 | Seattle             | Washington     |
+|            20 | Toronto             | Ontario        |
+|            50 | South San Francisco | California     |
+|            60 | Southlake           | Texas          |
+|            80 | Oxford              | Oxford         |
+|            90 | Seattle             | Washington     |
+|           110 | Seattle             | Washington     |
+|           190 | Seattle             | Washington     |
++---------------+---------------------+----------------+
+8 rows in set (0.00 sec)
+
+LEFT JOIN
+tata> select job_history.employee_id, jobs.job_title, jobs.min_salary
+    -> from job_history LEFT JOIN jobs
+    -> on job_history.job_id = jobs.job_id;
++-------------+--------------------------+------------+
+| employee_id | job_title                | min_salary |
++-------------+--------------------------+------------+
+|         200 | Administration Assistant |       3000 |
+|         101 | Accounting Manager       |       8200 |
+|         200 | Public Accountant        |       4200 |
+|         101 | Public Accountant        |       4200 |
+|         176 | Sales Manager            |      10000 |
+|         176 | Sales Representative     |       6000 |
+|         122 | Stock Clerk              |       2000 |
+|         114 | Stock Clerk              |       2000 |
+|         102 | Programmer               |       4000 |
+|         201 | Marketing Representative |       4000 |
++-------------+--------------------------+------------+
+10 rows in set (0.00 sec)

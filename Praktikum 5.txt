@@ -1,0 +1,362 @@
+Enter password: *****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> prompt tata>
+PROMPT set to 'tata>'
+tata> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.05 sec)
+
+tata> create database praktikum_5;
+Query OK, 1 row affected (0.03 sec)
+
+tata> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| praktikum_5        |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.00 sec)
+
+tata> use praktikum_5;
+Database changed
+tata> show tables;
+Empty set (0.02 sec)
+
+tata> create table job_history (
+    -> employee_id INT(6) UNSIGNED NOT NULL,
+    -> start_date DATE NOT NULL PRIMARY KEY,
+    -> end_date DATE NOT NULL,
+    -> job_id VARCHAR(10) NOT NULL,
+    -> department_id INT(4) UNSIGNED);
+Query OK, 0 rows affected, 2 warnings (0.12 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| job_history           |
++-----------------------+
+1 row in set (0.01 sec)
+
+tata> describe job_history;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| employee_id   | int unsigned | NO   |     | NULL    |       |
+| start_date    | date         | NO   | PRI | NULL    |       |
+| end_date      | date         | NO   |     | NULL    |       |
+| job_id        | varchar(10)  | NO   |     | NULL    |       |
+| department_id | int unsigned | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+5 rows in set (0.02 sec)
+
+tata> create table departments (
+    -> department_id INT(4) UNSIGNED NOT NULL PRIMARY KEY,
+    -> department_name VARCHAR(30) NOT NULL,
+    -> manager_id INT(6) UNSIGNED,
+    -> location_id INT(4) UNSIGNED);
+Query OK, 0 rows affected, 3 warnings (0.04 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| departments           |
+| job_history           |
++-----------------------+
+2 rows in set (0.00 sec)
+
+tata> describe departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | int unsigned | NO   | PRI | NULL    |       |
+| department_name | varchar(30)  | NO   |     | NULL    |       |
+| manager_id      | int unsigned | YES  |     | NULL    |       |
+| location_id     | int unsigned | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+tata> create table locations (
+    -> location_id INT(4) UNSIGNED NOT NULL PRIMARY KEY,
+    -> street_address VARCHAR(40),
+    -> postal_code VARCHAR(12),
+    -> city VARCHAR(30) NOT NULL,
+    -> state_province VARCHAR(25),
+    -> country_id CHAR(2));
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| departments           |
+| job_history           |
+| locations             |
++-----------------------+
+3 rows in set (0.00 sec)
+
+tata> describe locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| location_id    | int unsigned | NO   | PRI | NULL    |       |
+| street_address | varchar(40)  | YES  |     | NULL    |       |
+| postal_code    | varchar(12)  | YES  |     | NULL    |       |
+| city           | varchar(30)  | NO   |     | NULL    |       |
+| state_province | varchar(25)  | YES  |     | NULL    |       |
+| country_id     | char(2)      | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+tata> create table countries (
+    -> country_id CHAR(2) NOT NULL PRIMARY KEY,
+    -> country_name VARCHAR(40),
+    -> region_id INT UNSIGEND);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'UNSIGEND)' at line 4
+tata>
+tata> create table countries (
+    -> country_id CHAR(2) NOT NULL PRIMARY KEY,
+    -> country_name VARCHAR(40),
+    -> region_id INT UNSIGNED);
+Query OK, 0 rows affected (0.03 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| job_history           |
+| locations             |
++-----------------------+
+4 rows in set (0.00 sec)
+
+tata> describe countries;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| country_id   | char(2)      | NO   | PRI | NULL    |       |
+| country_name | varchar(40)  | YES  |     | NULL    |       |
+| region_id    | int unsigned | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+tata> create table regions (
+    -> region_id INT UNSIGNED NOT NULL PRIMARY KEY,
+    -> region_name VARCHAR(25));
+Query OK, 0 rows affected (0.07 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| job_history           |
+| locations             |
+| regions               |
++-----------------------+
+5 rows in set (0.01 sec)
+
+tata> describe regions;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| region_id   | int unsigned | NO   | PRI | NULL    |       |
+| region_name | varchar(25)  | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+tata> create table jobs (
+    -> job_id VARCHAR(10) NOT NULL PRIMARY KEY,
+    -> job_title VARCHAR(35) NOT NULL,
+    -> min_salary INT(6) UNSIGNED,
+    -> max_salary INT(6) UNSIGNED);
+Query OK, 0 rows affected, 2 warnings (0.03 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| job_history           |
+| jobs                  |
+| locations             |
+| regions               |
++-----------------------+
+6 rows in set (0.00 sec)
+
+tata> describe jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | varchar(10)  | NO   | PRI | NULL    |       |
+| job_title  | varchar(35)  | NO   |     | NULL    |       |
+| min_salary | int unsigned | YES  |     | NULL    |       |
+| max_salary | int unsigned | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+tata> create table employees (
+    -> employee_id INT(6) NOT NULL PRIMARY KEY,
+    -> first_name VARCHAR(20),
+    -> last_name VARCHAR(25) NOT NULL,
+    -> email VARCHAR(25) NOT NULL,
+    -> phone_number VARCHAR(20),
+    -> hire_date DATE NOT NULL,
+    -> job_id VARCHAR(10) NOT NULL,
+    -> salary INT(8,2) UNSIGNED,
+    -> commission_pct INT(2,2) UNSIGNED,
+    -> manager_id INT(6) UNSIGNED,
+    -> department_id INT(4) UNSIGNED,
+    -> bonus VARCHAR(5));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',2) UNSIGNED,
+commission_pct INT(2,2) UNSIGNED,
+manager_id INT(6) UNSIGNED,
+dep' at line 9
+tata>
+tata> create table employess (
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+tata>
+tata> create table employees (
+    -> employee_id INT(6) NOT NULL PRIMARY KEY,
+    -> first_name VARCHAR(20),
+    -> last_name VARCHAR(25) NOT NULL,
+    -> email VARCHAR(25) NOT NULL,
+    -> phone_number VARCHAR(20),
+    -> hire_date DATE NOT NULL,
+    -> job_id VARCHAR(10) NOT NULL,
+    -> salary DECIMAL(8,2) UNSIGNED,
+    -> commission_pct DECIMAL(2,2) UNSIGNED,
+    -> manager_id INT(6) UNSIGNED,
+    -> department_id INT(4) UNSIGNED,
+    -> bonus VARCHAR(5));
+Query OK, 0 rows affected, 5 warnings (0.05 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| employees             |
+| job_history           |
+| jobs                  |
+| locations             |
+| regions               |
++-----------------------+
+7 rows in set (0.00 sec)
+
+tata> describe employees;
++----------------+-----------------------+------+-----+---------+-------+
+| Field          | Type                  | Null | Key | Default | Extra |
++----------------+-----------------------+------+-----+---------+-------+
+| employee_id    | int                   | NO   | PRI | NULL    |       |
+| first_name     | varchar(20)           | YES  |     | NULL    |       |
+| last_name      | varchar(25)           | NO   |     | NULL    |       |
+| email          | varchar(25)           | NO   |     | NULL    |       |
+| phone_number   | varchar(20)           | YES  |     | NULL    |       |
+| hire_date      | date                  | NO   |     | NULL    |       |
+| job_id         | varchar(10)           | NO   |     | NULL    |       |
+| salary         | decimal(8,2) unsigned | YES  |     | NULL    |       |
+| commission_pct | decimal(2,2) unsigned | YES  |     | NULL    |       |
+| manager_id     | int unsigned          | YES  |     | NULL    |       |
+| department_id  | int unsigned          | YES  |     | NULL    |       |
+| bonus          | varchar(5)            | YES  |     | NULL    |       |
++----------------+-----------------------+------+-----+---------+-------+
+12 rows in set (0.01 sec)
+
+tata> drop table employees;
+Query OK, 0 rows affected (0.05 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| job_history           |
+| jobs                  |
+| locations             |
+| regions               |
++-----------------------+
+6 rows in set (0.00 sec)
+
+tata> create table employees (
+    -> employee_id INT(6) UNSIGNED NOT NULL PRIMARY KEY,
+    -> first_name VARCHAR(20),
+    -> last_name VARCHAR(25) NOT NULL,
+    -> email VARCHAR(25) NOT NULL,
+    -> phone_number VARCHAR(20),
+    -> hire_date DATE NOT NULL,
+    -> job_id VARCHAR(10) NOT NULL,
+    -> salary DECIMAL(8,2),
+    -> commission_pct DECIMAL(2,2),
+    -> manager_id INT(6) UNSIGNED,
+    -> department_id INT(4) UNSIGNED,
+    -> bonus VARCHAR(5));
+Query OK, 0 rows affected, 3 warnings (0.07 sec)
+
+tata> show tables;
++-----------------------+
+| Tables_in_praktikum_5 |
++-----------------------+
+| countries             |
+| departments           |
+| employees             |
+| job_history           |
+| jobs                  |
+| locations             |
+| regions               |
++-----------------------+
+7 rows in set (0.00 sec)
+
+tata> describe employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| employee_id    | int unsigned | NO   | PRI | NULL    |       |
+| first_name     | varchar(20)  | YES  |     | NULL    |       |
+| last_name      | varchar(25)  | NO   |     | NULL    |       |
+| email          | varchar(25)  | NO   |     | NULL    |       |
+| phone_number   | varchar(20)  | YES  |     | NULL    |       |
+| hire_date      | date         | NO   |     | NULL    |       |
+| job_id         | varchar(10)  | NO   |     | NULL    |       |
+| salary         | decimal(8,2) | YES  |     | NULL    |       |
+| commission_pct | decimal(2,2) | YES  |     | NULL    |       |
+| manager_id     | int unsigned | YES  |     | NULL    |       |
+| department_id  | int unsigned | YES  |     | NULL    |       |
+| bonus          | varchar(5)   | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+12 rows in set (0.01 sec)
+
+tata>
